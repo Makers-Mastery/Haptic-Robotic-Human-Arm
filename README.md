@@ -10,7 +10,8 @@ Hello! My name is Elijah, a high school senior going into college and a budding 
 </p>
 
 # Project Timeline
-My current progress
+At present, the arm is just about complete, this section will outline what I still need to do. 
+## Build Power Delivery System ##
 
 # Credits
 
