@@ -9,8 +9,9 @@ Hello! My name is Elijah, a high school senior going into college and a budding 
   <img width="1024" height="1400" src="https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/blob/main/Media/Full%20Arm%20Backpack.jpg">
 </p>
 
-# Credits
-
 # Project Timeline
+My current progress
+
+# Credits
 
 # Directory
