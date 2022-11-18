@@ -17,14 +17,16 @@ The most recent issue I've been encountering with my robotic arm was something c
 #### The Solution ####
 After talking it over with the Youbionic telegram chat, there are 2 methods I see for powering the arm here. No matter what method I end up choosing, I'm going to get another PCA9685 because that board isn't meant to handle more than ~8A, so I'm going to need to add a second board and power both seperately as well as reformating the code so I can control both boards with 1 ESP32. I also need to get some thicker wire to handle the very high current.
 #
-The first method of powering the arm would be to buy a bunch of 18650 rechageable batteries and battery holders for them, then wiring them in series until I have ~6v and paralle until I have the necesscary amperage.  
-Pros-easy recharging, relatively straightforward setup, easy to get the voltage and amperage I want
+The first method of powering the arm would be to buy a bunch of 18650 rechageable batteries and battery holders for them, then wiring them in series until I have ~6v and paralle until I have the necesscary amperage.  <br>
+Pros-easy recharging, relatively straightforward setup, easy to get the voltage and amperage I want <br>
 Cons-very expensive, long wait on batteries to arrive from online.
 #
-The second method method would be to use an 18v power tool battery and use a buck converter to lower the voltage to a managable amount, ~6v. I'm not sure how easily interfaceable power tool batteries are and whether or not I'd have to crack one open to acheive this, so I'm still looking into this method. 
-Pros-I already have power tool batteries and a charging station, significantly cheaper
+The second method method would be to use an 18v power tool battery and use a buck converter to lower the voltage to a managable amount, ~6v. I'm not sure how easily interfaceable power tool batteries are and whether or not I'd have to crack one open to acheive this, so I'm still looking into this method. <br>
+Pros-I already have power tool batteries and a charging station, significantly cheaper, possibly easier <br>
+Cons-risk of crappy buck converter, risk of overheating a buck converter
 
 ### Finish Mapping the Funtional Range of the Arm ### 
+
 
 ### Finish Editing Youtube Video ###
 
