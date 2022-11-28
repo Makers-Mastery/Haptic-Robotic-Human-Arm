@@ -36,6 +36,9 @@ As I've been building this project, I've been periodically recording my progress
 # Credits
 **Youbionic**-https://www.youbionic.com <br>
 None of this project would be possible without the ingenius designs of Federico Ciccarese and Christopher Calleja and all the help from the incredible community they've formed over on the Youbionic telegram. The arm and hand, though not originally designed to be used together (my talent with tinkercad solved this), as well as the exoarm were all designed by Youbionic and I followed their project guide in the process of building it, of course adding my own touches along the way.
-**Lucas VRTech**- 
+#
+**Lucas VRTech**-https://youtu.be/2yF-SJcg3zQ <br>
+
+
 
 # Directory
