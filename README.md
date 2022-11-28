@@ -30,15 +30,22 @@ Whatever method I end up choosing, I'm probably gonna have to spend a lot of mon
 ### Finish Mapping the Funtional Range of the Arm ### 
 Because I dont currently have a way to power the arm, I don't actually have any way to test it at the moment. Once I get the power situation sorted out, the next step would be to find the funtional rang of the servos installed in my arm. Each of the servos I have are rated for 180-270 degrees, but im ususally only using about 100 of that, so I need to figure out what range of 100 degrees that actually is. After that, all that will be left to do is find the same funtional range for the exo-arm and plug those values into the program. Baring any more serious complications, that should be the very last thing I need to do to finish the project.
 
+### Create Wiring Documentation
+Due to the "in progress" nature of this project, I'll be making wiring documentation using fritzing a little later down the line once the wiring for the project is a bit more finalized. If you'd like to see a current example of my wiring documentation abilities, you can check out my [Advanced RFID Lock project](https://github.com/The-EAR-Foundation/Advanced-RFID-Lock).
+
 ### Finish Editing Youtube Video ###
 As I've been building this project, I've been periodically recording my progress as I go with the end goal of eventually putting together a youtube video showing the entire build progress from start to finish. I've been trying to learn adobe premier in my free time in my graphics class so I've been slowly editing this video as I go. Would it have made more sense to make an instagram or tiktok account to post these progress updates as I go? Probably! But a youtube video is the plan for the time being. Once that's done sometime in the next 2 weeks, I'll uplaod here. For any colleges reading this, pay attention to this README file over the coming weeks because I'll be updating it as I go.
 
+
+
 # Credits
-**Youbionic**-https://www.youbionic.com <br>
+**[Youbionic](https://www.youbionic.com)** <br>
 None of this project would be possible without the ingenius designs of Federico Ciccarese and Christopher Calleja and all the help from the incredible community they've formed over on the Youbionic telegram. The arm and hand, though not originally designed to be used together (my talent with tinkercad solved this), as well as the exoarm were all designed by Youbionic and I followed their project guide in the process of building it, of course adding my own touches along the way.
 #
-**Lucas VRTech**-https://youtu.be/2yF-SJcg3zQ <br>
-
+**[Lucas VRTech](https://youtu.be/2yF-SJcg3zQ)** <br>
+This haptic glove enabled one of the most difficult parts of this project: the haptic feedback. I'd actually seen the video here about a month before I started this project, and I thought it was super cool and I really wanted to make one even though I didn't have a VR headset at the time (although I later got access to one as a part of my engineering internship with the University of Utah). Once I saw the Youbionic exoarm, I knew immediently I wanted to use this with the project. The glove serves two purposes in my project: meassuring the potentiometer values of each finger to translate into movements of the hand and to receive data from the force sensors on the hand and translate that data into motor movement to serve as haptic feedback by stopping the movement of each finger creating "feeling." None of this would've been possible without the incredible documentation, ease of setup, and open source nature of this fantastic project from Lucas. 
+#
+**[Random Nerd Tutorials](https://randomnerdtutorials.com/esp-now-two-way-communication-esp32/)**
 
 
 # Directory
