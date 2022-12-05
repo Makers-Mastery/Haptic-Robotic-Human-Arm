@@ -8,7 +8,8 @@ Hello! My name is Elijah, a high school senior going into college and a budding 
 <p align="center">
   <img width="1024" height="1400" src="https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/blob/main/Media/Full%20Arm%20Backpack.jpg">
 </p>
-# Project Update 12/5/22
+
+# Project Update 12/5/22 #
 I'm moving into the final steps of my project as I've been busy assembling the final power delivery system I designed. I'm using both 2 drill batteries to power the arm as well as 6 18650 batteries (2 packs of 3 wired in paralell, with the packs wired together in series) to power the hand. Because I'm now using 2 PCA9685s on one ESP32 to control the arm, I need to reformat the code to make up for this and allow ServoEasing to work with both boards. Once I'm finished updating the code, all that will be left to do is map out functional ranges for the arm and exo arm and I'll finally be finished with the project. I'll post a short Youtube video here showing off the arm once I'm finished, then I'll get to work on finishing the comprehensive build video. 
 
 # Project Timeline 11/17/22
