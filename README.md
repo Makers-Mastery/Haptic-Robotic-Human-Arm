@@ -8,6 +8,8 @@ Hello! My name is Elijah, a high school senior going into college and a budding 
 <p align="center">
   <img width="1024" height="1400" src="https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/blob/main/Media/Full%20Arm%20Backpack.jpg">
 </p>
+#Project Update 12/5/22
+I'm moving into the final steps of my project as I've been busy assembling the final power delivery system I designed. I'm using both 2 drill batteries to power the arm as well as 6 18650 batteries (2 packs of 3 wired in paralell, with the packs wired together in series) to power the hand. Because I'm now using 2 PCA9685s on one ESP32 to control the arm, I need to reformat the code to make up for this and allow ServoEasing to work with both boards. Once I'm finished updating the code, all that will be left to do is map out functional ranges for the arm and exo arm and I'll finally be finished with the project. I'll post a short Youtube video here showing off the arm once I'm finished, then I'll get to work on finishing the comprehensive build video. 
 
 # Project Timeline 11/17/22
 At present, the arm is just about complete, this section will outline what I still need to do. 
@@ -45,7 +47,8 @@ None of this project would be possible without the ingenius designs of Federico 
 **[Lucas VRTech](https://youtu.be/2yF-SJcg3zQ)** <br>
 This haptic glove enabled one of the most difficult parts of this project: the haptic feedback. I'd actually seen the video here about a month before I started this project, and I thought it was super cool and I really wanted to make one even though I didn't have a VR headset at the time (although I later got access to one as a part of my engineering internship with the University of Utah). Once I saw the Youbionic exoarm, I knew immediently I wanted to use this with the project. The glove serves two purposes in my project: meassuring the potentiometer values of each finger to translate into movements of the hand and to receive data from the force sensors on the hand and translate that data into motor movement to serve as haptic feedback by stopping the movement of each finger creating "feeling." None of this would've been possible without the incredible documentation, ease of setup, and open source nature of this fantastic project from Lucas. 
 #
-**[Random Nerd Tutorials](https://randomnerdtutorials.com/esp-now-two-way-communication-esp32/)**
+**[Random Nerd Tutorials](https://randomnerdtutorials.com/esp-now-two-way-communication-esp32/)** <br>
+This website has been indisposable for setting up the ESPNow wireless protocol I'm using for my ESP32 boards, it's by far the best documentation I've found. Credits to this website can be found in comments in my code as well, as their sample for ESP32 2 way communication is what I modified and built my code off.
 
 
 # Directory
