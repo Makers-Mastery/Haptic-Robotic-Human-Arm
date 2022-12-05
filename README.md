@@ -58,5 +58,5 @@ This website has been indisposable for setting up the ESPNow wireless protocol I
 **[3D Models](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/3D%20Models)** <br>
 **[Glove Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/2_way_glove)**<br>
 **[Hand Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/2_way_hand)**<br>
-**[Exo-Arm Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/receiver_profile)**<br>
-**[Arm Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/sender_profile)**<br>
+**[Exo-Arm Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/blob/main/Software/ExoArm_Code/ExoArm_Code.ino)**<br>
+**[Arm Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/blob/main/Software/Arm_Code/Arm_Code.ino)**<br>
