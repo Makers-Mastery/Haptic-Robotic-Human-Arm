@@ -53,10 +53,8 @@ This website has been indisposable for setting up the ESPNow wireless protocol I
 
 
 # Directory
-**[Media](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Media)** <br>
-This is where you can find all the photos and videos relevant to the project, will be curated as I go. <br>
-**[Software](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software)**<br>
-This is where you'll find the code for each of the 4 boards in the project, as well as some of the 3D models I designed or modified for the project. <br>
+**[Media](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Media)** - This is where you can find all the photos and videos relevant to the project, will be curated as I go. <br>
+**[Software](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software)** - This is where you'll find the code for each of the 4 boards in the project, as well as some of the 3D models I designed or modified for the project. <br>
 **[Glove Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/2_way_glove)**<br>
 **[Hand Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/2_way_hand)**<br>
 **[Exo-Arm Code](https://github.com/The-EAR-Foundation/Haptic-Robotic-Human-Arm/tree/main/Software/receiver_profile)**<br>
