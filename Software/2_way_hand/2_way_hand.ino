@@ -22,7 +22,7 @@
 #define NUMBER_OF_SERVOS
 //#define PROVIDE_ONLY_LINEAR_MOVEMENT // Activate this to disable all but LINEAR movement. Saves up to 1540 bytes program memory.
 //#define DISABLE_COMPLEX_FUNCTIONS // Activate this to disable the SINE, CIRCULAR, BACK, ELASTIC and BOUNCE easings. Saves up to 1850 bytes program memory.
-#define DEBUG // Activate this to generate lots of lovely debug output for this library.
+//#define DEBUG // Activate this to generate lots of lovely debug output for this library.
 #include "ServoEasing.hpp"
 
 #include <Wire.h>
@@ -39,6 +39,7 @@
 #define ringPres 39
 #define middlePres 34
 #define indexPres 35
+#define thumbPres 32
 
 //servo pins
 #define indexServo 0 //the pin number on your PCA board
@@ -50,7 +51,10 @@
 
 //int indexInitPos =0;
 
-#define servo_speed 90
+#define servo_speed 250
+
+//define multicore movement
+//TaskHandle_t fMovement;
 
 //servo rotation values
 short indexRotVal;
@@ -132,12 +136,14 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   incomingPotThumb = incomingPotReadings.thumb;
   updateDisplay();
 
-  moveFingers();
+  Serial.print("data handle core: ");
+  Serial.println(xPortGetCoreID());
+  //moveFingers();
 }
 
 void setup() {
   // Init Serial Monitor
-  Serial.begin(115200);
+  Serial.begin(9600);
   Wire.begin();
   ServoEasing *ServoMaster;
 
@@ -157,6 +163,7 @@ void setup() {
     ServoMaster = new ServoEasing(PCA9685_DEFAULT_ADDRESS, &Wire);
     ServoMaster->attach(thumbRotServo);
 
+ 
     /*
       if ((indexServo || middleServo || ringServo || pinkyServo || thumbServo || thumbRotServo) == INVALID_SERVO) {
       Serial.println(F("Error attaching servo index_finger - maybe MAX_EASING_SERVOS=" STR(MAX_EASING_SERVOS) " is to small to hold all servos"));
@@ -203,6 +210,15 @@ void setup() {
   ServoEasing::ServoEasingArray[pinkyServo]->setSpeed(servo_speed);
   ServoEasing::ServoEasingArray[thumbServo]->setSpeed(servo_speed);
   ServoEasing::ServoEasingArray[thumbRotServo]->setSpeed(servo_speed);
+
+  /*xTaskCreatePinnedToCore(
+   codeMFingers,
+   "f_Movement",
+   1000,
+   NULL,
+   1,
+   &fMovement,
+  1);*/
 }
 
 
@@ -225,6 +241,7 @@ void loop() {
   else {
     Serial.println("Error sending the data");
   }
+  moveFingers();
   //delay(1000);
 }
 void getReadings() {
@@ -232,7 +249,7 @@ void getReadings() {
   ringPValue = analogRead(ringPres);
   middlePValue = analogRead(middlePres);
   indexPValue = analogRead(indexPres);
-  thumbPValue = 0;
+  thumbPValue = analogRead(thumbPres);
 }
 
 void moveFingers() {
@@ -252,6 +269,8 @@ void moveFingers() {
   ServoEasing::ServoEasingArray[thumbServo]->startEaseTo(thumbRotVal); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   ServoEasing::ServoEasingArray[thumbRotServo]->startEaseTo(thumbDisRotVal); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
 
+  Serial.print("fingers core: ");
+  Serial.println(xPortGetCoreID());
   //ServoEasing::ServoEasingArray[index_finger_servo]->easeTo(rotation_value); //the is the sync method (non-asyng) if the above method doesn't work, uncomment this and comment the one above)
 
 }
