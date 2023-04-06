@@ -13,11 +13,11 @@
 #include <WiFi.h>
 #include <Wire.h>
 
-#define shoulderOut 36
-#define shoulderFor 39
-#define armRot 34
-#define elbow 35
-#define wrist 32
+#define shoulderOut 35
+#define shoulderFor 34
+#define armRot 32
+#define elbow 33
+#define wrist 25
 
 // REPLACE WITH YOUR RECEIVER MAC Address
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -49,7 +49,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
  
 void setup() {
   // Init Serial Monitor
-  Serial.begin(115200);
+  Serial.begin(9600);
  
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
@@ -77,6 +77,13 @@ void setup() {
 }
  
 void loop() {
+  //wrist 1300 left to 3700 right
+  //elbow 300 down to 1300 bent
+  //armRot 700 in to 1500 out
+  //shoulderFor 2000 back 2500 forward
+  //shoulderOut 1500 down to 3800 out
+  // put your main code here, to run repeatedly:
+  
   // Set values to send
   potValues.shoulderOutPotV = analogRead(shoulderOut);
   potValues.shoulderForPotV = analogRead(shoulderFor);
