@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="679" height="677" src="https://github.com/Makers-Mastery/Haptic-Robotic-Human-Arm/blob/main/Media/makers-masterypt3-removebg-preview.png">
+  <img width="679" height="677" src="https://github.com/Makers-Mastery/Haptic-Robotic-Human-Arm/blob/main/Media/60437999.png">
 </p>
 
 # Introduction
