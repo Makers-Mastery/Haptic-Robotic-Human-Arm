@@ -41,13 +41,30 @@
 #define pinkyServoGl 3
 #define thumbServoGl 4
 
+#define calibPin 4 //needs to be set
+
 #define servo_speed 60
+
 
 int indexRotValGl;
 int middleRotValGl;
 int ringRotValGl;
 int pinkyRotValGl;
 int thumbRotValGl;
+
+//updated on startup in calibPots
+short indexCalibValOpen;
+short middleCalibValOpen;
+short ringCalibValOpen;
+short pinkyCalibValOpen;
+short thumbCalibValOpen;
+
+//updated on startup in calibPots
+short indexCalibValClosed;
+short middleCalibValClosed;
+short ringCalibValClosed;
+short pinkyCalibValClosed;
+short thumbCalibValClosed;
 
 
 // REPLACE WITH THE MAC Address of your receiver
@@ -94,6 +111,12 @@ typedef struct struct_message_values {
 // Create a struct_message called BME280Readings to hold sensor readings
 struct_message_values potReadings;
 
+//create a struct_message to hold open calibrations to be sent on startup
+struct_message_values calibValuesOpen;
+
+//create a struct_message to hold closed calibrations to be sent on startup
+struct_message_values calibValuesClosed;
+
 // Create a struct_message to hold incoming sensor readings
 struct_message_values incomingPresReadings;
 
@@ -126,7 +149,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 
 void setup() {
   // Init Serial Monitor
-  Serial.begin(115200);
+  Serial.begin(9600);
   Wire.begin();
   ServoEasing *ServoMaster;
 
@@ -142,7 +165,7 @@ void setup() {
     ServoMaster = new ServoEasing(PCA9685_DEFAULT_ADDRESS, &Wire);
     ServoMaster->attach(pinkyServoGl);
     ServoMaster = new ServoEasing(PCA9685_DEFAULT_ADDRESS, &Wire);
-    ServoMaster->attach(thumbServoGl);  
+    ServoMaster->attach(thumbServoGl);
   }
 
   // Set device as a Wi-Fi Station
@@ -182,6 +205,34 @@ void setup() {
   ServoEasing::ServoEasingArray[ringServoGl]->setSpeed(servo_speed);
   ServoEasing::ServoEasingArray[pinkyServoGl]->setSpeed(servo_speed);
   ServoEasing::ServoEasingArray[thumbServoGl]->setSpeed(servo_speed);
+
+  //traps code in calib, click button once to calib open and again to calib close
+  calibPots();
+
+  //transmits calibrations to hand
+  // Send message via ESP-NOW
+  esp_err_t openValsSend = esp_now_send(broadcastAddress, (uint8_t *) &calibValuesOpen, sizeof(calibValuesOpen));
+
+  if (openValsSend == ESP_OK) {
+    Serial.println("Sent with success");
+  }
+  else {
+    Serial.println("Error sending the data");
+  }
+  updateDisplay();
+  delay(3000);
+
+  // Send message via ESP-NOW
+  esp_err_t closedValsSend = esp_now_send(broadcastAddress, (uint8_t *) &calibValuesClosed, sizeof(calibValuesClosed));
+
+  if (closedValsSend == ESP_OK) {
+    Serial.println("Sent with success");
+  }
+  else {
+    Serial.println("Error sending the data");
+  }
+  updateDisplay();
+  delay(3000);
 }
 
 void loop() {
@@ -205,6 +256,8 @@ void loop() {
   }
   updateDisplay();
   //delay(1000);
+
+  moveGloveHaptics();
 }
 void getReadings() {
   pinkyPotValue = analogRead(pinkyPot);
@@ -216,39 +269,90 @@ void getReadings() {
 
 void moveGloveHaptics() {
   //85 to 4095
-
-  if (incomingPresPinky > 150) {
-    pinkyRotValGl = map(incomingPresReadings.pinky, 50, 650, 30, 170);
+   
+  if (incomingPresPinky > 1900) {
+    pinkyRotValGl = map(analogRead(ringPot), 4095, pinkyCalibValClosed, 0, 170);
     ServoEasing::ServoEasingArray[pinkyServoGl]->startEaseTo(pinkyRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   } else {
-    ServoEasing::ServoEasingArray[pinkyServoGl]->startEaseTo(pinkyRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
-  }
+    ServoEasing::ServoEasingArray[pinkyServoGl]->startEaseTo(180); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
+  }  
 
   if (incomingPresRing > 150) {
-    ringRotValGl = map(incomingPresReadings.ring, 50, 650, 30, 170);
+    ringRotValGl = map(analogRead(ringPot), 4095, ringCalibValClosed, 0, 170);
     ServoEasing::ServoEasingArray[ringServoGl]->startEaseTo(ringRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   } else {
-    ServoEasing::ServoEasingArray[ringServoGl]->startEaseTo(ringRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
+    ServoEasing::ServoEasingArray[ringServoGl]->startEaseTo(180); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   }
 
   if (incomingPresMiddle > 150) {
-    middleRotValGl = map(incomingPresReadings.middle, 50, 650, 30, 170);
+    middleRotValGl = map(analogRead(middlePot), 4095, middleCalibValClosed, 0, 170);
     ServoEasing::ServoEasingArray[middleServoGl]->startEaseTo(middleRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   } else {
-    ServoEasing::ServoEasingArray[middleServoGl]->startEaseTo(middleRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
+    ServoEasing::ServoEasingArray[middleServoGl]->startEaseTo(180); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   }
 
   if (incomingPresIndex > 150) {
-    indexRotValGl = map(incomingPresReadings.index, 50, 650, 30, 170);
+    indexRotValGl = map(analogRead(indexPot), 4095, indexCalibValClosed, 0, 170);
     ServoEasing::ServoEasingArray[indexServoGl]->startEaseTo(indexRotValGl);
   } else {
-    ServoEasing::ServoEasingArray[indexServoGl]->startEaseTo(indexRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
+    ServoEasing::ServoEasingArray[indexServoGl]->startEaseTo(180); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   }
 
+  if (incomingPresThumb > 150) {
+    thumbRotValGl = map(analogRead(thumbPot), 4095 , thumbCalibValClosed, 0, 170);
+    ServoEasing::ServoEasingArray[thumbServoGl]->startEaseTo(thumbRotValGl); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
+  } else {
+    ServoEasing::ServoEasingArray[thumbServoGl]->startEaseTo(180); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
+  }
   /*
     if () {
     } else {
     } */
+}
+
+void calibPots() {
+  int gloveCounter = 0;
+  while (gloveCounter < 2) {
+    Serial.println("entering calibration");
+    Serial.print("glove counter: ");
+    Serial.println(gloveCounter);
+    Serial.print("calibPin: ");
+    Serial.println(digitalRead(calibPin));
+    if (digitalRead(calibPin) == 1 && gloveCounter == 0) {
+      Serial.println("calibrating open...");
+      indexCalibValOpen = analogRead(indexPot);
+      middleCalibValOpen = analogRead(middlePot);
+      ringCalibValOpen = analogRead(ringPot);
+      pinkyCalibValOpen = analogRead(pinkyPot);
+      thumbCalibValOpen = analogRead(thumbPot);
+
+      calibValuesOpen.pinky = pinkyCalibValOpen;
+      calibValuesOpen.ring = ringCalibValOpen;
+      calibValuesOpen.middle = middleCalibValOpen;
+      calibValuesOpen.index = indexCalibValOpen;
+      calibValuesOpen.thumb = thumbCalibValOpen;
+
+      gloveCounter++;
+      delay(3000);
+
+    } else if (digitalRead(calibPin) == 1 && gloveCounter == 1) {
+      Serial.println("calibrating closed...");
+      indexCalibValClosed = analogRead(indexPot);
+      middleCalibValClosed = analogRead(middlePot);
+      ringCalibValClosed = analogRead(ringPot);
+      pinkyCalibValClosed = analogRead(pinkyPot);
+      thumbCalibValClosed = analogRead(thumbPot);
+
+      calibValuesClosed.pinky = pinkyCalibValClosed;
+      calibValuesClosed.ring = ringCalibValClosed;
+      calibValuesClosed.middle = middleCalibValClosed;
+      calibValuesClosed.index = indexCalibValClosed;
+      calibValuesClosed.thumb = thumbCalibValClosed;
+
+      gloveCounter++;
+      delay(3000);
+    }
+  }
 }
 
 void updateDisplay() {
@@ -256,8 +360,7 @@ void updateDisplay() {
   // Display Readings in Serial Monitor
   Serial.println("INCOMING READINGS");
   Serial.print("pinky pres: ");
-  Serial.println(incomingPresReadings.pinky);
-  Serial.print("ring pres: ");
+  Serial.println(incomingPresReadings.pinky);  Serial.print("ring pres: ");
   Serial.println(incomingPresReadings.ring);
   Serial.print("middle pres: ");
   Serial.println(incomingPresReadings.middle);
