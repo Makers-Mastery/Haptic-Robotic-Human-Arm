@@ -90,6 +90,23 @@ short incomingPotMiddle;
 short incomingPotIndex;
 short incomingPotThumb;
 
+//define open calib values
+short openCalPinky;
+short openCalRing;
+short openCalMiddle;
+short openCalIndex;
+short openCalThumb;
+
+//define closed calib values
+short closedCalPinky;
+short closedCalRing;
+short closedCalMiddle;
+short closedCalIndex;
+short closedCalThumb;
+
+//calibration counter for while loop
+int calCounter = 0;
+
 // Variable to store if sending data was successful
 String success;
 
@@ -109,6 +126,12 @@ struct_message_values pressureReadings;
 
 // Create a struct_message to hold incoming sensor readings
 struct_message_values incomingPotReadings;
+
+//create a struct message to hold open calibration values
+struct_message_values incomingOpenCals;
+
+//create a struct message to hold closed calibration values
+struct_message_values incomingClosedCals;
 
 esp_now_peer_info_t peerInfo;
 
@@ -138,7 +161,44 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 
   Serial.print("data handle core: ");
   Serial.println(xPortGetCoreID());
-  //moveFingers();
+}
+
+// Callback when data is received for open glove calibrations
+void OnOpenDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&incomingOpenCals, incomingData, sizeof(incomingOpenCals));
+  Serial.print("Bytes received: ");
+  Serial.println(len);
+  openCalPinky = incomingOpenCals.pinky;
+  openCalRing = incomingOpenCals.ring;
+  openCalMiddle = incomingOpenCals.middle;
+  openCalIndex = incomingOpenCals.index;
+  openCalThumb = incomingOpenCals.thumb;
+  updateDisplay();
+
+  Serial.print("data handle core: ");
+  Serial.println(xPortGetCoreID());
+
+  calCounter++;
+  delay(3000);
+}
+
+// Callback when data is received for closed glove calibrations
+void OnClosedDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&incomingClosedCals, incomingData, sizeof(incomingClosedCals));
+  Serial.print("Bytes received: ");
+  Serial.println(len);
+  closedCalPinky = incomingClosedCals.pinky;
+  closedCalRing = incomingClosedCals.ring;
+  closedCalMiddle = incomingClosedCals.middle;
+  closedCalIndex = incomingClosedCals.index;
+  closedCalThumb = incomingClosedCals.thumb;
+  updateDisplay();
+
+  Serial.print("data handle core: ");
+  Serial.println(xPortGetCoreID());
+
+  calCounter++;
+  delay(3000);
 }
 
 void setup() {
@@ -163,7 +223,7 @@ void setup() {
     ServoMaster = new ServoEasing(PCA9685_DEFAULT_ADDRESS, &Wire);
     ServoMaster->attach(thumbRotServo);
 
- 
+
     /*
       if ((indexServo || middleServo || ringServo || pinkyServo || thumbServo || thumbRotServo) == INVALID_SERVO) {
       Serial.println(F("Error attaching servo index_finger - maybe MAX_EASING_SERVOS=" STR(MAX_EASING_SERVOS) " is to small to hold all servos"));
@@ -193,6 +253,21 @@ void setup() {
     Serial.println("Failed to add peer");
     return;
   }
+  
+  while (calCounter < 2) {
+    if (calCounter == 0) {
+      esp_now_register_recv_cb(OnOpenDataRecv);
+      delay(3000);
+      esp_now_unregister_recv_cb();
+      delay(2000);
+    } else if (calCounter==1) {
+      esp_now_register_recv_cb(OnClosedDataRecv);
+      delay(3000);
+      esp_now_unregister_recv_cb();
+      delay(2000);
+    }
+  }
+  
   // Register for a callback function that will be called when data is received
   esp_now_register_recv_cb(OnDataRecv);
 
@@ -212,13 +287,13 @@ void setup() {
   ServoEasing::ServoEasingArray[thumbRotServo]->setSpeed(servo_speed);
 
   /*xTaskCreatePinnedToCore(
-   codeMFingers,
-   "f_Movement",
-   1000,
-   NULL,
-   1,
-   &fMovement,
-  1);*/
+    codeMFingers,
+    "f_Movement",
+    1000,
+    NULL,
+    1,
+    &fMovement,
+    1);*/
 }
 
 
@@ -254,13 +329,14 @@ void getReadings() {
 
 void moveFingers() {
   //change values
-  //1 to 255
-  indexRotVal = map(incomingPotReadings.index, 1100, 4095, 55, 180);
-  middleRotVal = map(incomingPotReadings.middle, 500, 4000, 42, 195);
-  ringRotVal = map(incomingPotReadings.ring, 970, 4095, 40, 180);
-  pinkyRotVal = map(incomingPotReadings.pinky, 1000, 2960, 40, 170);
-  thumbRotVal = map(incomingPotReadings.thumb, 1600, 4095, 0, 180);
-  thumbDisRotVal = map(incomingPotReadings.thumb, 1600, 4095, 160, 40);
+  //1 to 255  
+                                                //closed, open
+  indexRotVal = map(incomingPotReadings.index, openCalIndex, closedCalIndex, 55, 180);
+  middleRotVal = map(incomingPotReadings.middle, openCalMiddle, closedCalMiddle, 42, 195);
+  ringRotVal = map(incomingPotReadings.ring, openCalRing, closedCalRing, 55, 180);
+  pinkyRotVal = map(incomingPotReadings.pinky, openCalPinky, closedCalPinky, 40, 170);
+  thumbRotVal = map(incomingPotReadings.thumb, openCalThumb, closedCalThumb, 0, 180);
+  thumbDisRotVal = map(incomingPotReadings.thumb, openCalThumb, closedCalThumb, 160, 40);
 
   ServoEasing::ServoEasingArray[indexServo]->startEaseTo(indexRotVal); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
   ServoEasing::ServoEasingArray[middleServo]->startEaseTo(middleRotVal); //async method (means that you can rotate more then one servo the same time (the method bellow is rotating one servo at a time))
